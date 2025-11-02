@@ -4,8 +4,15 @@
 }
 <div class="row">
     <h2>Sign Up Form</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-info text-center" role="alert">
+            @TempData["SuccessMessage"]
+        </div>
+    }
     <div class="col-md-6 offset-md-3">
-        <form>
+        <form asp-controller="Home" asp-action="SignUp" method="post">
             <div class="row mb-3">
                 <label for="UserName" class="col-md-4 col-form-label" asp-for="UserName"></label>
                 <div class="col-md-8">

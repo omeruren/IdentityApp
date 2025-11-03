@@ -115,13 +115,51 @@ namespace AspNetCoreIdentityApp.Web.Controllers
             }
             string passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(hasUser);
 
-            var passwordResetLink = Url.Action("ResetPassword", "Home", new { userId = hasUser.Id, Token = passwordResetToken },HttpContext.Request.Scheme);
+            var passwordResetLink = Url.Action("ResetPassword", "Home", new { userId = hasUser.Id, Token = passwordResetToken }, HttpContext.Request.Scheme);
 
             await _emailService.SendResetPasswordEmail(passwordResetLink, hasUser.Email);
 
             TempData["SuccessMessage"] = "Reset Password link has been sent to your mail address";
 
             return RedirectToAction(nameof(ForgetPassword));
+        }
+
+        [HttpGet]
+        public IActionResult ResetPassword(string userId, string token)
+        {
+            TempData["userId"] = userId;
+            TempData["token"] = token;
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel request)
+        {
+            var userId = TempData["userId"];
+            var token = TempData["token"];
+
+            if(userId == null || token == null)
+            {
+                throw new Exception("An Error handled");
+            }
+
+            var hasUser = await _userManager.FindByIdAsync(userId.ToString());
+            if (hasUser == null)
+            {
+                ModelState.AddModelError(string.Empty, "User not found");
+                return View();
+            }
+            var result = await _userManager.ResetPasswordAsync(hasUser, token.ToString(), request.Password);
+
+            if (result.Succeeded) {
+
+                TempData["SuccessMessage"] = "Your password has been successfully renewed.";
+            }
+            else
+            {
+                ModelState.AddModelErrorList(result.Errors.Select(x => x.Description).ToList());
+           
+            }
+            return View();
         }
     }
 }

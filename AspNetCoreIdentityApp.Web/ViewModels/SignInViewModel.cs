@@ -20,6 +20,7 @@ namespace AspNetCoreIdentityApp.Web.ViewModels
         [Display(Name = "Email :")]
         public string Email { get; set; }
 
+        [DataType(DataType.Password)]
         [Required(ErrorMessage = "Password is required")]
 
         [Display(Name = "Password :")]

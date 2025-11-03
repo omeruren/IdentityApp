@@ -77,16 +77,21 @@ namespace AspNetCoreIdentityApp.Web.Controllers
             if (hasUser == null)
             {
                 ModelState.AddModelError(string.Empty, "Email or password is incorrect");
-                return View(request);
+                return View();
             }
-            var result = await _signInManager.PasswordSignInAsync(hasUser, request.Password, request.RememberMe, false);
+            var result = await _signInManager.PasswordSignInAsync(hasUser, request.Password, request.RememberMe, true);
 
-            if (!result.Succeeded)
+            if (result.Succeeded)
+                return Redirect(returnUrl);
+            
+            if (result.IsLockedOut)
             {
-                ModelState.AddModelErrorList(new List<string>() { "Email or password is incorrect" });
-                return View(request);
+                ModelState.AddModelErrorList(new List<string>() { "too many login attempts please try again later" });
+                return View();
             }
-            return Redirect(returnUrl);
+            int entryRemain =await  _userManager.GetAccessFailedCountAsync(hasUser);
+            ModelState.AddModelErrorList(new List<string>() { $"Email or password is incorrect, (You have {3 - entryRemain} Entry left)" });
+            return View();
         }
     }
 }

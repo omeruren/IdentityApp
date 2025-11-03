@@ -20,6 +20,7 @@ namespace AspNetCoreIdentityApp.Web.ViewModels
         [Display(Name = "User Name :")]
         public string UserName { get; set; }
 
+        [EmailAddress(ErrorMessage ="Invalid Format")]
         [Required( ErrorMessage ="Email is required")]
         [Display(Name = "Email :")]
         public string Email { get; set; }
@@ -34,6 +35,7 @@ namespace AspNetCoreIdentityApp.Web.ViewModels
         [Display(Name = "Password :")]
         public string Password { get; set; }
 
+        [Compare(nameof(Password), ErrorMessage ="Passwords did not match")]
         [Required( ErrorMessage ="Repeat Password is required")]
 
         [Display(Name = "Repeat Password :")]

@@ -62,5 +62,11 @@ namespace AspNetCoreIdentityApp.Web.Controllers
             TempData["SuccessMessage"] = "Sign up is successful.";
             return RedirectToAction(nameof(SignUp));
         }
+
+        [HttpGet]
+        public IActionResult SignIn()
+        {
+            return View(); 
+        }
     }
 }

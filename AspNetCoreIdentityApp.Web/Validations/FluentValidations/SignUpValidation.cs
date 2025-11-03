@@ -1,7 +1,7 @@
 ﻿using AspNetCoreIdentityApp.Web.ViewModels;
 using FluentValidation;
 
-namespace AspNetCoreIdentityApp.Web.Validations
+namespace AspNetCoreIdentityApp.Web.Validations.FluentValidations
 {
     public class SignUpValidation : AbstractValidator<SignUpViewModel>
     {

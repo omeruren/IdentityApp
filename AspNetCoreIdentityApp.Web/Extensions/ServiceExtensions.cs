@@ -1,4 +1,5 @@
 ﻿using AspNetCoreIdentityApp.Web.Models;
+using AspNetCoreIdentityApp.Web.Validations;
 
 namespace AspNetCoreIdentityApp.Web.Extensions
 {
@@ -14,7 +15,7 @@ namespace AspNetCoreIdentityApp.Web.Extensions
                 opt.Password.RequireLowercase = true;
                 opt.Password.RequireUppercase = false;
                 opt.Password.RequireDigit = true;
-            }).AddEntityFrameworkStores<AppDbContext>();
+            }).AddPasswordValidator<PasswordValidator>().AddEntityFrameworkStores<AppDbContext>();
         }
     }
 }

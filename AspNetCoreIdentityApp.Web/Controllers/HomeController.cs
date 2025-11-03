@@ -1,8 +1,6 @@
 ﻿using System.Diagnostics;
 using AspNetCoreIdentityApp.Web.Models;
-using AspNetCoreIdentityApp.Web.Validations;
 using AspNetCoreIdentityApp.Web.ViewModels;
-using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using AspNetCoreIdentityApp.Web.Extensions;
 using System.Formats.Tar;
+using AspNetCoreIdentityApp.Web.Services;
 namespace AspNetCoreIdentityApp.Web.Controllers
 {
     public class HomeController : Controller
@@ -15,11 +16,14 @@ namespace AspNetCoreIdentityApp.Web.Controllers
         private readonly UserManager<AppUser> _userManager;
 
         private readonly SignInManager<AppUser> _signInManager;
-        public HomeController(UserManager<AppUser> userManager, ILogger<HomeController> logger, SignInManager<AppUser> signInManager)
+
+        private readonly IEmailService _emailService;
+        public HomeController(UserManager<AppUser> userManager, ILogger<HomeController> logger, SignInManager<AppUser> signInManager, IEmailService emailService)
         {
             _userManager = userManager;
             _logger = logger;
             _signInManager = signInManager;
+            _emailService = emailService;
         }
 
 
@@ -111,7 +115,9 @@ namespace AspNetCoreIdentityApp.Web.Controllers
             }
             string passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(hasUser);
 
-            var passwordResetLink = Url.Action("ResetPassword", "Home", new { userId = hasUser.Id, Token = passwordResetToken });
+            var passwordResetLink = Url.Action("ResetPassword", "Home", new { userId = hasUser.Id, Token = passwordResetToken },HttpContext.Request.Scheme);
+
+            await _emailService.SendResetPasswordEmail(passwordResetLink, hasUser.Email);
 
             TempData["SuccessMessage"] = "Reset Password link has been sent to your mail address";
 

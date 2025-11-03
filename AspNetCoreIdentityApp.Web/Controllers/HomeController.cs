@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
 using AspNetCoreIdentityApp.Web.Models;
+using AspNetCoreIdentityApp.Web.Validations;
 using AspNetCoreIdentityApp.Web.ViewModels;
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -42,6 +44,17 @@ namespace AspNetCoreIdentityApp.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> SignUp(SignUpViewModel request)
         {
+            var validator = new SignUpValidation();
+            var resuption = await validator.ValidateAsync(request);
+            
+            if (!resuption.IsValid) // Not Working ?
+            {
+                foreach (var error in resuption.Errors)
+                {
+                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                }
+                return View(request);
+            }
             var identityResult = await _userManager.CreateAsync(new() { UserName = request.UserName, PhoneNumber = request.Phone, Email = request.Email }, request.PasswordConfirm);
 
             if (!identityResult.Succeeded)

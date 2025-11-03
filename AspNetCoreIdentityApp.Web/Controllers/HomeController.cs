@@ -1,9 +1,10 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using AspNetCoreIdentityApp.Web.Models;
 using AspNetCoreIdentityApp.Web.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-
+using AspNetCoreIdentityApp.Web.Extensions;
 namespace AspNetCoreIdentityApp.Web.Controllers
 {
     public class HomeController : Controller
@@ -12,10 +13,12 @@ namespace AspNetCoreIdentityApp.Web.Controllers
 
         private readonly UserManager<AppUser> _userManager;
 
-        public HomeController(UserManager<AppUser> userManager, ILogger<HomeController> logger)
+        private readonly SignInManager<AppUser> _signInManager;
+        public HomeController(UserManager<AppUser> userManager, ILogger<HomeController> logger, SignInManager<AppUser> signInManager)
         {
             _userManager = userManager;
             _logger = logger;
+            _signInManager = signInManager;
         }
 
 
@@ -42,20 +45,17 @@ namespace AspNetCoreIdentityApp.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> SignUp(SignUpViewModel request)
         {
-            
-            if (!ModelState.IsValid) 
+
+            if (!ModelState.IsValid)
             {
                 return View(request);
-                
+
             }
             var identityResult = await _userManager.CreateAsync(new() { UserName = request.UserName, PhoneNumber = request.Phone, Email = request.Email }, request.PasswordConfirm);
 
             if (!identityResult.Succeeded)
             {
-                foreach (IdentityError item in identityResult.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, item.Description);
-                }
+                ModelState.AddModelErrorList(identityResult.Errors.Select(x => x.Description).ToList());
                 return View();
             }
 
@@ -66,7 +66,27 @@ namespace AspNetCoreIdentityApp.Web.Controllers
         [HttpGet]
         public IActionResult SignIn()
         {
-            return View(); 
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> SignIn(SignInViewModel request, string? returnUrl = null)
+        {
+            returnUrl = returnUrl ?? Url.Action("Index", "Home");
+            var hasUser = await _userManager.FindByEmailAsync(request.Email);
+
+            if (hasUser == null)
+            {
+                ModelState.AddModelError(string.Empty, "Email or password is incorrect");
+                return View(request);
+            }
+            var result = await _signInManager.PasswordSignInAsync(hasUser, request.Password, request.RememberMe, false);
+
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelErrorList(new List<string>() { "Email or password is incorrect" });
+                return View(request);
+            }
+            return Redirect(returnUrl);
         }
     }
 }

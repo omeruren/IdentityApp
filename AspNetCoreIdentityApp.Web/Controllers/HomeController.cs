@@ -5,6 +5,7 @@ using AspNetCoreIdentityApp.Web.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using AspNetCoreIdentityApp.Web.Extensions;
+using System.Formats.Tar;
 namespace AspNetCoreIdentityApp.Web.Controllers
 {
     public class HomeController : Controller
@@ -83,20 +84,38 @@ namespace AspNetCoreIdentityApp.Web.Controllers
 
             if (result.Succeeded)
                 return Redirect(returnUrl);
-            
+
             if (result.IsLockedOut)
             {
                 ModelState.AddModelErrorList(new List<string>() { "too many login attempts please try again later" });
                 return View();
             }
-            int entryRemain =await  _userManager.GetAccessFailedCountAsync(hasUser);
+            int entryRemain = await _userManager.GetAccessFailedCountAsync(hasUser);
             ModelState.AddModelErrorList(new List<string>() { $"Email or password is incorrect, (You have {3 - entryRemain} Entry left)" });
             return View();
         }
 
-        public IActionResult ResetPassword()
+        [HttpGet]
+        public IActionResult ForgetPassword()
         {
             return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ForgetPassword(ForgetPasswordViewModel request)
+        {
+            var hasUser = await _userManager.FindByEmailAsync(request.Email);
+            if (hasUser == null)
+            {
+                ModelState.AddModelError(string.Empty, "No user found with this email address.");
+                return View();
+            }
+            string passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(hasUser);
+
+            var passwordResetLink = Url.Action("ResetPassword", "Home", new { userId = hasUser.Id, Token = passwordResetToken });
+
+            TempData["SuccessMessage"] = "Reset Password link has been sent to your mail address";
+
+            return RedirectToAction(nameof(ForgetPassword));
         }
     }
 }

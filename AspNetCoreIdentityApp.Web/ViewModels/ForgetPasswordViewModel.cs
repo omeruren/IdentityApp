@@ -2,7 +2,7 @@
 
 namespace AspNetCoreIdentityApp.Web.ViewModels
 {
-    public class ResetPasswordViewModel
+    public class ForgetPasswordViewModel
     {
         [EmailAddress(ErrorMessage = "Invalid format")]
         [Required(ErrorMessage = "Email is required")]

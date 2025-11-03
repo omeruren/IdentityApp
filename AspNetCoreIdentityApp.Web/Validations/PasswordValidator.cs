@@ -10,13 +10,13 @@ namespace AspNetCoreIdentityApp.Web.Validations
             var errors = new List<IdentityError>();
             if (password.ToLower().Contains(user.UserName.ToLower()))
             {
-                errors.Add(new() { Code = "PasswordNoContainsUserName", Description = "Password can not contains user name" });
+                errors.Add(new() { Code = "PasswordContainsUserName", Description = "Password can not contains user name" });
 
             }
 
             if (password.ToLower().StartsWith("1234"))
             {
-                errors.Add(new() { Code = "PasswordNoContains1234", Description = "Password can not start with consecutive numbers" });
+                errors.Add(new() { Code = "PasswordContains1234", Description = "Password can not start with consecutive numbers" });
             }
 
             if (errors.Any())

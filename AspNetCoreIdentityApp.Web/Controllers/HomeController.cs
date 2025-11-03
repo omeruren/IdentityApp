@@ -93,5 +93,7 @@ namespace AspNetCoreIdentityApp.Web.Controllers
             ModelState.AddModelErrorList(new List<string>() { $"Email or password is incorrect, (You have {3 - entryRemain} Entry left)" });
             return View();
         }
+
+
     }
 }

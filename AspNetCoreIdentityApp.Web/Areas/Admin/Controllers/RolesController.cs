@@ -47,7 +47,7 @@ namespace AspNetCoreIdentityApp.Web.Areas.Admin.Controllers
             {
                 ModelState.AddModelErrorList(result.Errors);
             }
-
+            TempData["SuccessMessage"] = "Role Created Successfully";
             return RedirectToAction(nameof(Index));
         }
 
@@ -78,6 +78,26 @@ namespace AspNetCoreIdentityApp.Web.Areas.Admin.Controllers
 
             TempData["SuccessMessage"] = "Role Updated Successfully";
             return View();
+        }
+
+        public async Task<IActionResult> RoleDelete(string id) {
+
+            var toDelete = await _roleManager.FindByIdAsync(id);
+
+            if (toDelete == null)
+            {
+                throw new Exception("Role not found");
+            }
+            var result =await _roleManager.DeleteAsync(toDelete);
+
+            if (!result.Succeeded)
+            {
+                throw new Exception(result.Errors.Select(x => x.Description).First());
+            }
+
+            TempData["SuccessMessage"] = "Role Deleted Successfully";
+            return RedirectToAction(nameof(Index));
+
         }
     }
 }

@@ -9,7 +9,12 @@
             </a>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" asp-controller="Member" asp-action="Index">Profile</a></li>
+                <a class="dropdown-item" asp-controller="Member" asp-action="ChangePassword">Change Password</a>
+
+                <a class="dropdown-item" asp-controller="Member" asp-action="UserEdit">Edit Profile</a>
+
                 <li><a class="dropdown-item" asp-route-returnurl="/Home/Index" asp-controller="Member" asp-action="SignOut">Sign Out</a></li>
+
             </ul>
         </li>
     </ul>

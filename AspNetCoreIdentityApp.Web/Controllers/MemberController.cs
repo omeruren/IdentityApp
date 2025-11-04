@@ -31,6 +31,17 @@ namespace AspNetCoreIdentityApp.Web.Controllers
 
         }
 
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult ChangePassword(ChangePasswordViewModel request)
+        {
+            return View();
+        }
+
 
     }
 }

@@ -1,14 +1,20 @@
-﻿@model AdminModel.RoleCreateViewModel
-
+﻿@model AdminModel.RoleUpdateViewModel
 @{
-    ViewData["Title"] = "RoleCreate";
+    ViewData["Title"] = "RoleUpdate";
 }
 
 
 <div class="row">
     <div class="col-md-6 offset-md-3">
-        <h2>Create Role</h2>
-        <form asp-action="RoleCreate" method="post">
+        <h2>Update Role</h2>
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-info text-center" role="alert">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+        <form asp-action="RoleUpdate" method="post">
+            <input hidden asp-for="Id"/>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
@@ -29,5 +35,9 @@
 
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+
+

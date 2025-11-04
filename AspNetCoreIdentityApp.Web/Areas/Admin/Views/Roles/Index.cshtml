@@ -23,7 +23,8 @@
 
                 <tr>
                     <th>#</th>
-                _    <th>Role Name</th>
+                   <th>Role Name</th>
+                   <th>Options</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,6 +35,9 @@
                     <tr>
                         <td>@count</td>
                         <td>@item.Name</td>
+                        <td>
+                            <a class="text-decoration-none" asp-area="Admin" asp-controller="Roles" asp-action="RoleUpdate" asp-route-id="@item.Id">Update</a>
+                        </td>
                     </tr>
                 }
             </tbody>

@@ -56,11 +56,11 @@ namespace AspNetCoreIdentityApp.Web.Areas.Admin.Controllers
         {
             var roleToUpdate = await _roleManager.FindByIdAsync(id);
 
-            if(roleToUpdate == null)
+            if (roleToUpdate == null)
             {
                 throw new Exception("Role not found");
             }
-            return View(new RoleUpdateViewModel() { Id= roleToUpdate.Id, Name= roleToUpdate!.Name!});
+            return View(new RoleUpdateViewModel() { Id = roleToUpdate.Id, Name = roleToUpdate!.Name! });
         }
         [HttpPost]
         public async Task<IActionResult> RoleUpdate(RoleUpdateViewModel request)
@@ -80,7 +80,8 @@ namespace AspNetCoreIdentityApp.Web.Areas.Admin.Controllers
             return View();
         }
 
-        public async Task<IActionResult> RoleDelete(string id) {
+        public async Task<IActionResult> RoleDelete(string id)
+        {
 
             var toDelete = await _roleManager.FindByIdAsync(id);
 
@@ -88,7 +89,7 @@ namespace AspNetCoreIdentityApp.Web.Areas.Admin.Controllers
             {
                 throw new Exception("Role not found");
             }
-            var result =await _roleManager.DeleteAsync(toDelete);
+            var result = await _roleManager.DeleteAsync(toDelete);
 
             if (!result.Succeeded)
             {
@@ -98,6 +99,31 @@ namespace AspNetCoreIdentityApp.Web.Areas.Admin.Controllers
             TempData["SuccessMessage"] = "Role Deleted Successfully";
             return RedirectToAction(nameof(Index));
 
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AssignRoleToUser(string id)
+        {
+            var currentUser = await _userManager.FindByIdAsync(id);
+
+            var roles = await _roleManager.Roles.ToListAsync();
+
+            var userRoles = await _userManager.GetRolesAsync(currentUser!);
+            var roleViewModelList = new List<AssignRoleToUserViewModel>();
+
+            foreach (var role in roles)
+            {
+
+                var assignRoleToUserViewModel = new AssignRoleToUserViewModel() { Id = role.Id, Name = role.Name! };
+
+                if (userRoles.Contains(role.Name!))
+                    assignRoleToUserViewModel.Exist = true;
+
+                roleViewModelList.Add(assignRoleToUserViewModel);
+
+            }
+
+            return View(roleViewModelList);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace AspNetCoreIdentityApp.Web.Controllers
         {
             var currentUser = await _userManager.FindByNameAsync(User.Identity!.Name!);
 
-            var userViewModel = new UserViewModel { Email = currentUser!.Email, Phone = currentUser.PhoneNumber, UserName = currentUser.UserName,PictureUrl= currentUser.Picture };
+            var userViewModel = new UserViewModel { Email = currentUser!.Email, Phone = currentUser.PhoneNumber, UserName = currentUser.UserName, PictureUrl = currentUser.Picture };
 
             return View(userViewModel);
         }
@@ -146,6 +146,14 @@ namespace AspNetCoreIdentityApp.Web.Controllers
                 Gender = currentUser.Gender,
             };
             return View(userEditViewModel);
+        }
+
+        public IActionResult AccessDenied(string returnUrl)
+        {
+            string message = string.Empty;
+            message = "You do not have been authorized yet. Please contact to Admins";
+            ViewBag.message = message;
+            return View();
         }
     }
 }

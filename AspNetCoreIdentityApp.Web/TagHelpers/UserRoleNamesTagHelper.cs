@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace AspNetCoreIdentityApp.Web.TagHelpers
 {

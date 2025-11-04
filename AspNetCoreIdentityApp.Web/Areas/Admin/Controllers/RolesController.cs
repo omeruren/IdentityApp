@@ -1,6 +1,7 @@
 ﻿using AspNetCoreIdentityApp.Web.Areas.Admin.Models;
 using AspNetCoreIdentityApp.Web.Extensions;
 using AspNetCoreIdentityApp.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Build.Framework;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 namespace AspNetCoreIdentityApp.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin,role-actions")]
     public class RolesController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
@@ -63,6 +65,7 @@ namespace AspNetCoreIdentityApp.Web.Areas.Admin.Controllers
             }
             return View(new RoleUpdateViewModel() { Id = roleToUpdate.Id, Name = roleToUpdate!.Name! });
         }
+
         [HttpPost]
         public async Task<IActionResult> RoleUpdate(RoleUpdateViewModel request)
         {

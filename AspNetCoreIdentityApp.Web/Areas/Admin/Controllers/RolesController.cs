@@ -3,6 +3,7 @@ using AspNetCoreIdentityApp.Web.Extensions;
 using AspNetCoreIdentityApp.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
@@ -106,6 +107,8 @@ namespace AspNetCoreIdentityApp.Web.Areas.Admin.Controllers
         {
             var currentUser = await _userManager.FindByIdAsync(id);
 
+            ViewBag.userId = id;
+
             var roles = await _roleManager.Roles.ToListAsync();
 
             var userRoles = await _userManager.GetRolesAsync(currentUser!);
@@ -124,6 +127,24 @@ namespace AspNetCoreIdentityApp.Web.Areas.Admin.Controllers
             }
 
             return View(roleViewModelList);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> AssignRoleToUser(string userId, List<AssignRoleToUserViewModel> requestList)
+        {
+            var userToassingRoles = await _userManager.FindByIdAsync(userId);
+
+            foreach (var role in requestList)
+            {
+                if (role.Exist)
+                    await _userManager.AddToRoleAsync(userToassingRoles!, role.Name);
+
+                else
+                    await _userManager.RemoveFromRoleAsync(userToassingRoles!, role.Name);
+
+            }
+            return RedirectToAction(nameof(HomeController.UserList),"Home");
         }
     }
 }

@@ -30,7 +30,7 @@ namespace AspNetCoreIdentityApp.Web.ViewModels
         [Display(Name = "Phone :")]
         public string Phone { get; set; }
 
-
+        [MinLength(6, ErrorMessage = "Password can not be less than 6 characters")]
         [DataType(DataType.Password)]
         [Required( ErrorMessage ="Password is required")]
         [Display(Name = "Password :")]

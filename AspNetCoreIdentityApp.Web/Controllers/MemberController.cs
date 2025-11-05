@@ -188,6 +188,12 @@ namespace AspNetCoreIdentityApp.Web.Controllers
         {
             return View();
         }
+        [Authorize(Policy = "ViolencePolicy")]
+        [HttpGet]
+        public IActionResult ViolencePage()
+        {
+            return View();
+        }
 
     }
 }

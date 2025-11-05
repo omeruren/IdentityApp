@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using AspNetCoreIdentityApp.Web.Extensions;
 using System.Formats.Tar;
 using AspNetCoreIdentityApp.Web.Services;
+using System.Security.Claims;
 namespace AspNetCoreIdentityApp.Web.Controllers
 {
     public class HomeController : Controller
@@ -63,6 +64,19 @@ namespace AspNetCoreIdentityApp.Web.Controllers
                 ModelState.AddModelErrorList(identityResult.Errors.Select(x => x.Description).ToList());
                 return View();
             }
+
+            var exhangeExpireClaim = new Claim("ExchangeExpiteDate", DateTime.Now.AddDays (10).ToString());
+
+            var user = await _userManager.FindByNameAsync(request.UserName);
+
+             var claimResult = await _userManager.AddClaimAsync(user!, exhangeExpireClaim) ;
+
+            if (!claimResult.Succeeded)
+            {
+                ModelState.AddModelErrorList(identityResult.Errors.Select(x => x.Description).ToList());
+                return View();
+            }
+
 
             TempData["SuccessMessage"] = "Sign up is successful.";
             return RedirectToAction(nameof(SignUp));

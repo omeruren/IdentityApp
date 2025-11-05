@@ -104,19 +104,30 @@ namespace AspNetCoreIdentityApp.Web.Controllers
                 ModelState.AddModelError(string.Empty, "Email or password is incorrect");
                 return View();
             }
+
             var result = await _signInManager.PasswordSignInAsync(hasUser, request.Password, request.RememberMe, true);
 
-            if (result.Succeeded)
-                return Redirect(returnUrl);
+            int entryRemain = await _userManager.GetAccessFailedCountAsync(hasUser);
 
             if (result.IsLockedOut)
             {
                 ModelState.AddModelErrorList(new List<string>() { "too many login attempts please try again later" });
                 return View();
             }
-            int entryRemain = await _userManager.GetAccessFailedCountAsync(hasUser);
-            ModelState.AddModelErrorList(new List<string>() { $"Email or password is incorrect, (You have {3 - entryRemain} Entry left)" });
-            return View();
+
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelErrorList(new List<string>() { $"Email or password is incorrect, (You have {3 - entryRemain} Entry left)" });
+                return View();
+            }
+
+            if (hasUser.BirthDate.HasValue)
+            {
+
+                await _signInManager.SignInWithClaimsAsync(hasUser, request.RememberMe, new[] { new Claim("birthdate", hasUser.BirthDate.Value.ToString()) });
+            }
+            return Redirect(returnUrl!);
+
         }
 
         [HttpGet]

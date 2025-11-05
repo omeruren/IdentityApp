@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.FileProviders;
+using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace AspNetCoreIdentityApp.Web.Controllers
@@ -132,7 +134,13 @@ namespace AspNetCoreIdentityApp.Web.Controllers
             }
             await _userManager.UpdateSecurityStampAsync(currentUser);
             await _signInManager.SignOutAsync();
-            await _signInManager.SignInAsync(currentUser, true);
+
+            if (request.BirthDate.HasValue)
+                await _signInManager.SignInWithClaimsAsync(currentUser, true, new[] { new Claim("birthdate", currentUser!.BirthDate!.Value.ToString()) });
+            else
+                await _signInManager.SignInAsync(currentUser, true);
+
+
 
             TempData["SuccessMessage"] = "User Credentials updated successfully";
 
@@ -168,14 +176,16 @@ namespace AspNetCoreIdentityApp.Web.Controllers
             return View(userClaims);
         }
 
-        [Authorize(Policy ="GaziantepPolicy")]
+        [Authorize(Policy = "GaziantepPolicy")]
         [HttpGet]
-        public IActionResult GaziantepPage() { 
+        public IActionResult GaziantepPage()
+        {
             return View();
         }
         [Authorize(Policy = "ExchangeExpireDate")]
         [HttpGet]
-        public IActionResult ExchangePolicy() { 
+        public IActionResult ExchangePolicy()
+        {
             return View();
         }
 

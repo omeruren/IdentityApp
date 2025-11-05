@@ -65,7 +65,7 @@ namespace AspNetCoreIdentityApp.Web.Controllers
                 return View();
             }
 
-            var exhangeExpireClaim = new Claim("ExchangeExpiteDate", DateTime.Now.AddDays (10).ToString());
+            var exhangeExpireClaim = new Claim("ExchangeExpireDate", DateTime.Now.AddDays (10).ToString());
 
             var user = await _userManager.FindByNameAsync(request.UserName);
 

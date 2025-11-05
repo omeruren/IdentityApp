@@ -155,5 +155,17 @@ namespace AspNetCoreIdentityApp.Web.Controllers
             ViewBag.message = message;
             return View();
         }
+
+        [HttpGet]
+        public IActionResult Claims()
+        {
+            var userClaims = User.Claims.Select(x => new ClaimViewModel()
+            {
+                Issuer = x.Issuer,
+                Type = x.Type,
+                Value = x.Value,
+            }).ToList();
+            return View(userClaims);
+        }
     }
 }

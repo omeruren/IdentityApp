@@ -4,9 +4,7 @@ using AspNetCoreIdentityApp.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace AspNetCoreIdentityApp.Web.Areas.Admin.Controllers
 {

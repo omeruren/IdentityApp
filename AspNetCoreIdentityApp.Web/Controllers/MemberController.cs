@@ -173,6 +173,11 @@ namespace AspNetCoreIdentityApp.Web.Controllers
         public IActionResult GaziantepPage() { 
             return View();
         }
+        [Authorize(Policy = "ExchangeExpireDate")]
+        [HttpGet]
+        public IActionResult ExchangePolicy() { 
+            return View();
+        }
 
     }
 }

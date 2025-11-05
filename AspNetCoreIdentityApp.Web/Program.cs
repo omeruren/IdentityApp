@@ -2,8 +2,10 @@ using AspNetCoreIdentityApp.Web.ClaimProviders;
 using AspNetCoreIdentityApp.Web.Extensions;
 using AspNetCoreIdentityApp.Web.Models;
 using AspNetCoreIdentityApp.Web.OptionModels;
+using AspNetCoreIdentityApp.Web.Requirements;
 using AspNetCoreIdentityApp.Web.Services;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
@@ -31,6 +33,7 @@ builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Emai
 builder.Services.AddIdentityService();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IClaimsTransformation, UserClaimProvider>();
+builder.Services.AddScoped<IAuthorizationHandler, ExchangeExrpireRequirementHandler>();
 
 
 builder.Services.AddAuthorization(opt =>
@@ -38,6 +41,10 @@ builder.Services.AddAuthorization(opt =>
     opt.AddPolicy("GaziantepPolicy", policy =>
     {
         policy.RequireClaim("city", "Gaziantep");
+    });
+    opt.AddPolicy("ExchangeExpireDate", policy =>
+    {
+        policy.AddRequirements(new ExchangeExpireRequirment());
     });
 });
 

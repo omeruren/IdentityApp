@@ -59,6 +59,20 @@ builder.Services.AddAuthorization(opt =>
         policy.RequireClaim("permission", Permissions.Order.Delete);
         policy.RequireClaim("permission", Permissions.Stock.Delete);
     });
+    opt.AddPolicy("Permissions.Order.Read", policy =>
+    {
+        policy.RequireClaim("permission", Permissions.Order.Read);
+        
+    });
+    opt.AddPolicy("Permissions.Order.Delete", policy =>
+    {
+        policy.RequireClaim("permission", Permissions.Order.Delete);
+    });
+    opt.AddPolicy("Permissions.Stock.Delete", policy =>
+    {
+        policy.RequireClaim("permission", Permissions.Stock.Delete);
+
+    });
 
 
 });

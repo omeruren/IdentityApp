@@ -167,5 +167,12 @@ namespace AspNetCoreIdentityApp.Web.Controllers
             }).ToList();
             return View(userClaims);
         }
+
+        [Authorize(Policy ="GaziantepPolicy")]
+        [HttpGet]
+        public IActionResult GaziantepPage() { 
+            return View();
+        }
+
     }
 }

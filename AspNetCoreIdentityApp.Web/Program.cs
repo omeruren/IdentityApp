@@ -26,10 +26,20 @@ builder.Services.Configure<SecurityStampValidatorOptions>(opt =>
 builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.GetCurrentDirectory()));
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
+
+
 builder.Services.AddIdentityService();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IClaimsTransformation, UserClaimProvider>();
 
+
+builder.Services.AddAuthorization(opt =>
+{
+    opt.AddPolicy("GaziantepPolicy", policy =>
+    {
+        policy.RequireClaim("city", "Gaziantep");
+    });
+});
 
 builder.Services.ConfigureApplicationCookie(opt =>
 {

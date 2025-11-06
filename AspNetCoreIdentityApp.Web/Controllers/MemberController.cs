@@ -1,6 +1,7 @@
 ﻿using AspNetCoreIdentityApp.Web.Extensions;
 using AspNetCoreIdentityApp.Web.Models;
-using AspNetCoreIdentityApp.Web.ViewModels;
+using AspNetCoreIdentityApp.Core.Models;
+using AspNetCoreIdentityApp.Core.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +31,7 @@ namespace AspNetCoreIdentityApp.Web.Controllers
 
             return View(userViewModel);
         }
-        public async Task SignOut()
+        public async Task Logout()
         {
             await _signInManager.SignOutAsync();
 
@@ -51,9 +52,9 @@ namespace AspNetCoreIdentityApp.Web.Controllers
 
             }
 
-            var currentUser = await _userManager.FindByNameAsync(User.Identity!.Name!);
+            var currentUser = (await _userManager.FindByNameAsync(User.Identity!.Name!))!;
 
-            var checkOldPassword = await _userManager.CheckPasswordAsync(currentUser, request.OldPassword);
+            var checkOldPassword = await _userManager.CheckPasswordAsync(currentUser!, request.OldPassword);
 
             if (!checkOldPassword)
             {
@@ -81,7 +82,7 @@ namespace AspNetCoreIdentityApp.Web.Controllers
         public async Task<IActionResult> UserEdit()
         {
             ViewBag.Gender = new SelectList(Enum.GetNames(typeof(Gender)));
-            var currentUser = await _userManager.FindByNameAsync(User.Identity!.Name!);
+            var currentUser = (await _userManager.FindByNameAsync(User.Identity!.Name!))!;
             var userEditViewModel = new UserEditViewModel()
             {
                 UserName = currentUser.UserName!,
@@ -100,7 +101,7 @@ namespace AspNetCoreIdentityApp.Web.Controllers
             if (!ModelState.IsValid)
                 return View();
 
-            var currentUser = await _userManager.FindByNameAsync(User.Identity!.Name!);
+            var currentUser = (await _userManager.FindByNameAsync(User.Identity!.Name!))!;
 
             currentUser.UserName = request.UserName;
             currentUser.Email = request.Email;

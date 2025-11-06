@@ -1,4 +1,4 @@
-﻿using AspNetCoreIdentityApp.Web.ViewModels;
+﻿using AspNetCoreIdentityApp.Core.ViewModels;
 using FluentValidation;
 
 namespace AspNetCoreIdentityApp.Web.Validations.FluentValidations

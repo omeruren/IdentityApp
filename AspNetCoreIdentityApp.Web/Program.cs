@@ -1,8 +1,8 @@
 using AspNetCoreIdentityApp.Web.ClaimProviders;
 using AspNetCoreIdentityApp.Web.Extensions;
 using AspNetCoreIdentityApp.Web.Models;
-using AspNetCoreIdentityApp.Web.OptionModels;
-using AspNetCoreIdentityApp.Web.PermissionsRoot;
+using AspNetCoreIdentityApp.Core.OptionModels;
+using AspNetCoreIdentityApp.Core.PermissionsRoot;
 using AspNetCoreIdentityApp.Web.Requirements;
 using AspNetCoreIdentityApp.Web.Seeds;
 using AspNetCoreIdentityApp.Web.Services;
@@ -85,7 +85,7 @@ builder.Services.ConfigureApplicationCookie(opt =>
 
     opt.LoginPath = new PathString("/Home/SignIn");
 
-    opt.LogoutPath = new PathString("/Member/SignOut");
+    opt.LogoutPath = new PathString("/Member/Logout");
 
     opt.AccessDeniedPath = new PathString("/Member/AccessDenied");
 

@@ -1,5 +1,5 @@
 ﻿
-using AspNetCoreIdentityApp.Web.OptionModels;
+using AspNetCoreIdentityApp.Core.OptionModels;
 using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Mail;
@@ -15,7 +15,7 @@ namespace AspNetCoreIdentityApp.Web.Services
             _emailSettings = options.Value;
         }
 
-        public async Task SendResetPasswordEmail(string resetPasswordEmailLink, string reciever)
+        public async Task SendResetPasswordEmail(string resetPasswordEmailLink, string receiver)
         {
             var smtpClient = new SmtpClient();
 
@@ -29,7 +29,7 @@ namespace AspNetCoreIdentityApp.Web.Services
             var mailMessage = new MailMessage();
 
             mailMessage.From = new MailAddress(_emailSettings.Email);
-            mailMessage.To.Add(reciever);
+            mailMessage.To.Add(receiver);
 
             mailMessage.Subject = "localhost | password reset link";
             mailMessage.Body = @$"
@@ -172,7 +172,7 @@ table, td {{ color: #000000; }} @media (max-width: 480px) {{ #u_column_2 .v-col-
       <td class=""v-container-padding-padding"" style=""overflow-wrap:break-word;word-break:break-word;padding:20px 40px 10px;font-family:'Raleway',sans-serif;"" align=""left"">
         
   <div class=""v-text-align"" style=""font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;"">
-    <p style=""line-height: 140%; margin: 0px;""><span data-metadata=""&lt;!--(figmeta)eyJmaWxlS2V5IjoiTHJJMHBSU20xM203UWc0Tk1XZXVQeCIsInBhc3RlSUQiOjE4NjYyMDI5OTgsImRhdGFUeXBlIjoic2NlbmUifQo=(/figmeta)--&gt;"" style=""line-height: 19.6px;""></span>Dear {reciever}<br><br>The password for your account will expire in 1 hour. You are expected to change or retain your current password <strong>Now!</strong><br><br><br></p>
+    <p style=""line-height: 140%; margin: 0px;""><span data-metadata=""&lt;!--(figmeta)eyJmaWxlS2V5IjoiTHJJMHBSU20xM203UWc0Tk1XZXVQeCIsInBhc3RlSUQiOjE4NjYyMDI5OTgsImRhdGFUeXBlIjoic2NlbmUifQo=(/figmeta)--&gt;"" style=""line-height: 19.6px;""></span>Dear {receiver}<br><br>The password for your account will expire in 1 hour. You are expected to change or retain your current password <strong>Now!</strong><br><br><br></p>
   </div>
 
       </td>

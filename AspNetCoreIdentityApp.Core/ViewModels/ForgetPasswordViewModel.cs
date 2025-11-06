@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AspNetCoreIdentityApp.Web.ViewModels
+namespace AspNetCoreIdentityApp.Core.ViewModels
 {
     public class ForgetPasswordViewModel
     {
         [EmailAddress(ErrorMessage = "Invalid format")]
         [Required(ErrorMessage = "Email is required")]
         [Display(Name = "Email :")]
-        public string Email { get; set; }
+        public string Email { get; set; } = null!;
     }
 }

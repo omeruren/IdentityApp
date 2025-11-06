@@ -6,6 +6,6 @@ namespace AspNetCoreIdentityApp.Web.Areas.Admin.Models
     {
         [Required(ErrorMessage ="Role name is required")]
         [Display(Name="Role Name :")]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
     }
 }

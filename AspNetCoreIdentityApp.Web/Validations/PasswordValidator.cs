@@ -5,12 +5,14 @@ namespace AspNetCoreIdentityApp.Web.Validations
 {
     public class PasswordValidator : IPasswordValidator<AppUser>
     {
+        
         public Task<IdentityResult> ValidateAsync(UserManager<AppUser> manager, AppUser user, string? password)
         {
             var errors = new List<IdentityError>();
-            if (password.ToLower().Contains(user.UserName.ToLower()))
+            if (password!.ToLower().Contains(user.UserName!.ToLower()))
             {
-                errors.Add(new() { Code = "PasswordContainsUserName", Description = "Password can not contains user name" });
+
+                errors.Add(new() { Code = "PasswordContainsUserName", Description = "Password  can not contains user name" });
 
             }
 

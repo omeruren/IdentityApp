@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AspNetCoreIdentityApp.Web.ViewModels
+namespace AspNetCoreIdentityApp.Core.ViewModels
 {
     public class SignInViewModel
     {
@@ -15,17 +15,17 @@ namespace AspNetCoreIdentityApp.Web.ViewModels
             Password = password;
         }
 
-        [EmailAddress(ErrorMessage ="Invalid format")]
+        [EmailAddress(ErrorMessage = "Invalid format")]
         [Required(ErrorMessage = "Email is required")]
         [Display(Name = "Email :")]
-        public string Email { get; set; }
+        public string Email { get; set; } = null!;
 
         [DataType(DataType.Password)]
         [Required(ErrorMessage = "Password is required")]
 
         [Display(Name = "Password :")]
-        public string Password { get; set; }
+        public string Password { get; set; } = null!;
         [Display(Name = "Remember Me")]
-        public bool RememberMe { get; set; }
+        public bool RememberMe { get; set; } 
     }
 }

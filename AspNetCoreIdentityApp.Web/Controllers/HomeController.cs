@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using AspNetCoreIdentityApp.Web.Models;
-using AspNetCoreIdentityApp.Web.ViewModels;
+using AspNetCoreIdentityApp.Core.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using AspNetCoreIdentityApp.Web.Extensions;
@@ -148,7 +148,7 @@ namespace AspNetCoreIdentityApp.Web.Controllers
 
             var passwordResetLink = Url.Action("ResetPassword", "Home", new { userId = hasUser.Id, Token = passwordResetToken }, HttpContext.Request.Scheme);
 
-            await _emailService.SendResetPasswordEmail(passwordResetLink, hasUser.Email);
+            await _emailService.SendResetPasswordEmail(passwordResetLink!, hasUser!.Email!);
 
             TempData["SuccessMessage"] = "Reset Password link has been sent to your mail address";
 
@@ -173,13 +173,13 @@ namespace AspNetCoreIdentityApp.Web.Controllers
                 throw new Exception("An Error handled");
             }
 
-            var hasUser = await _userManager.FindByIdAsync(userId.ToString());
+            var hasUser = await _userManager.FindByIdAsync(userId.ToString()!);
             if (hasUser == null)
             {
                 ModelState.AddModelError(string.Empty, "User not found");
                 return View();
             }
-            var result = await _userManager.ResetPasswordAsync(hasUser, token.ToString(), request.Password);
+            var result = await _userManager.ResetPasswordAsync(hasUser, token.ToString()!, request.Password);
 
             if (result.Succeeded) {
 

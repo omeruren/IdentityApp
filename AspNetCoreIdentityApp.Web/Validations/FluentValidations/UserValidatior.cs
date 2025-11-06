@@ -9,7 +9,7 @@ namespace AspNetCoreIdentityApp.Web.Validations.FluentValidations
         {
             var errors = new List<IdentityError>();
 
-            var isNumeric = int.TryParse(user.UserName[0]!.ToString(), out _);
+            var isNumeric = int.TryParse(user!.UserName![0].ToString(), out _);
 
             if (isNumeric)
             {

@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
-using AspNetCoreIdentityApp.Web.Models;
 using AspNetCoreIdentityApp.Core.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +7,7 @@ using AspNetCoreIdentityApp.Web.Extensions;
 using System.Formats.Tar;
 using AspNetCoreIdentityApp.Web.Services;
 using System.Security.Claims;
+using AspNetCoreIdentityApp.Repository.Models;
 namespace AspNetCoreIdentityApp.Web.Controllers
 {
     public class HomeController : Controller

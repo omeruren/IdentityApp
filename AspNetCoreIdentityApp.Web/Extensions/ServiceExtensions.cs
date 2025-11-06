@@ -1,5 +1,5 @@
-﻿using AspNetCoreIdentityApp.Web.Helpers.Localization;
-using AspNetCoreIdentityApp.Web.Models;
+﻿using AspNetCoreIdentityApp.Repository.Models;
+using AspNetCoreIdentityApp.Web.Helpers.Localization;
 using AspNetCoreIdentityApp.Web.Validations;
 using AspNetCoreIdentityApp.Web.Validations.FluentValidations;
 using Microsoft.AspNetCore.Identity;

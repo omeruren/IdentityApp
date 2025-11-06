@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using AspNetCoreIdentityApp.Web.Extensions;
 using System.Formats.Tar;
-using AspNetCoreIdentityApp.Web.Services;
 using System.Security.Claims;
 using AspNetCoreIdentityApp.Repository.Models;
+using AspNetCoreIdentityApp.Service.Services;
 namespace AspNetCoreIdentityApp.Web.Controllers
 {
     public class HomeController : Controller

@@ -16,22 +16,38 @@ namespace AspNetCoreIdentityApp.Web.ClaimProviders
 
         public async Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
         {
-            var identiyUser = principal.Identity as ClaimsIdentity;
-
-
-            var currentUser = await _userManager.FindByNameAsync(identiyUser!.Name!);
-
-            if (String.IsNullOrEmpty(currentUser!.City))
+            if (principal != null && principal.Identity.IsAuthenticated)
             {
-                return principal;
-            }
+                ClaimsIdentity identity = principal.Identity as ClaimsIdentity;
 
-            if (principal.HasClaim(x => x.Type != "city"))
-            {
-                Claim cityClaim = new Claim("city", currentUser.City);
-                identiyUser.AddClaim(cityClaim);
-            }
+                AppUser user = await _userManager.FindByNameAsync(identity.Name);
 
+                if (user != null)
+                {
+                    if (user.BirthDate != null)
+                    {
+                        var today = DateTime.Today;
+                        var age = today.Year - user.BirthDate?.Year;
+
+                        if (age > 15)
+                        {
+                            Claim ViolenceClaim = new Claim("violence", true.ToString(), ClaimValueTypes.String, "Internal");
+
+                            identity.AddClaim(ViolenceClaim);
+                        }
+                    }
+
+                    if (user.City != null)
+                    {
+                        if (!principal.HasClaim(c => c.Type == "city"))
+                        {
+                            Claim CityClaim = new Claim("city", user.City, ClaimValueTypes.String, "Internal");
+
+                            identity.AddClaim(CityClaim);
+                        }
+                    }
+                }
+            }
 
             return principal;
         }

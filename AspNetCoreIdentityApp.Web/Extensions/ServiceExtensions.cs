@@ -28,36 +28,43 @@ namespace AspNetCoreIdentityApp.Web.Extensions
             });
 
         }
-        public static void AddIdentityServiceExt(this IServiceCollection services)
+        public static void AddIdentityServiceExt(this IServiceCollection services,IConfiguration configuration)
         {
 
             services.Configure<DataProtectionTokenProviderOptions>(opt =>
             {
                 opt.TokenLifespan = TimeSpan.FromMinutes(30);
             });
+
+            services.AddAuthentication().AddFacebook(opts =>
+            {
+                opts.AppId = configuration["Authentication:Facebook:AppId"];
+                opts.AppSecret = configuration["Authentication:Facebook:AppSecret"];
+            });
             services.AddIdentity<AppUser, AppRole>(opt =>
             {
                 opt.User.RequireUniqueEmail = true;
-                opt.Password.RequiredUniqueChars = 6;
-                opt.Password.RequireNonAlphanumeric = false;
-                opt.Password.RequireLowercase = true;
-                opt.Password.RequireUppercase = false;
-                opt.Password.RequireDigit = true;
+                opt.User.AllowedUserNameCharacters = "abcçdeföÖgğhıijklmnoçpqrsştuüvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._";
 
+                opt.Password.RequiredLength = 4;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequireDigit = false;
                 opt.Lockout.MaxFailedAccessAttempts = 3;
-                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3);
-            }).AddPasswordValidator<PasswordValidator>()
-            .AddUserValidator<UserValidatior>()
-            .AddErrorDescriber<LocalizationIdentityErrorDescriber>()
-            .AddDefaultTokenProviders()
-            .AddEntityFrameworkStores<AppDbContext>();
+                   opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3);
+               }).AddPasswordValidator<PasswordValidator>()
+               .AddUserValidator<UserValidatior>()
+               .AddErrorDescriber<LocalizationIdentityErrorDescriber>()
+               .AddDefaultTokenProviders()
+               .AddEntityFrameworkStores<AppDbContext>();
         }
 
-        public static void RegisterServicesExt(this IServiceCollection services)
+        public static void RegisterServicesExt(this IServiceCollection services,IConfiguration configuration)
         {
             services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.GetCurrentDirectory()));
 
-            services.AddIdentityServiceExt();
+            services.AddIdentityServiceExt(configuration);
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IClaimsTransformation, UserClaimProvider>();
             services.AddScoped<IAuthorizationHandler, ExchangeExrpireRequirementHandler>();

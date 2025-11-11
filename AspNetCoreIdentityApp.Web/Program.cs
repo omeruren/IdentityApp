@@ -19,12 +19,10 @@ builder.Services.Configure<SecurityStampValidatorOptions>(opt =>
 }); // Security Stamp
 
 
-
-
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
 
-builder.Services.RegisterServicesExt();
+builder.Services.RegisterServicesExt(builder.Configuration);
 builder.Services.RegisterPoliciesAndPermissionsExt();
 
 

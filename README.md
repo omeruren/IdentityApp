@@ -29,12 +29,13 @@ Gerçek senaryolarda kullanılabilecek güvenli kimlik doğrulama sisteminin olu
 
 ⚙️ ASP.NET Core Identity Entegrasyonu
 
+🔞  Yaş bazlı erişim kontrolü (Violence Authentication
+
 📬 SMTP veya MailKit ile E-posta Gönderimi
 
 🧱 Katmanlı Mimari Yapı (Clean Architecture Yaklaşımı)
 
 🧾 Asenkron (async/await) destekli EF Core işlemleri
-
 
 🧱 Kullanılan Teknolojiler
 Katman / Bileşen	Teknoloji
@@ -47,11 +48,10 @@ Mimari	Clean Architecture, Dependency Injection, Asynchronous Programming
 
 📁 Proje Yapısı (Örnek)
 IdentityApp/
-├── IdentityApp.API/           # API katmanı (Controllers, Auth endpoints)
-├── IdentityApp.Application/   # Servisler, Policy tanımları, handler’lar
-├── IdentityApp.Domain/        # Entity’ler, Identity modelleri, Claims
-├── IdentityApp.Infrastructure/# Mail servisleri, veri erişimi, config
-└── IdentityApp.Persistence/   # DbContext, migration, seed verileri
+├── IdentityApp.Web/         # Web katmanı (Controllers, Auth endpoints)
+├── IdentityApp.Services/    # Servisler, Policy tanımları, handler’lar
+├── IdentityApp.Core/        # Entity’ler, Identity modelleri, Claims
+└── IdentityApp.Repository/  # Repositories , DbContext, migration, seed datas
 
 📧 Şifre Yenileme Akışı
 
@@ -82,7 +82,9 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("CanEditProfile", policy => policy.RequireClaim("Permission", "EditProfile"));
 });
 
+🔞 Yaş Sınırlandırılması
 
+ Yaş Sınırlandırılması ile kullanıcının yaşına göre Şiddet içerikli sayfaların görüntülenmesi kontrol altına alınabilinir.
 Bu sayede kullanıcılar claim’lerine veya özel politikalara göre yetkilendirilir.
 
 🧾 Örnek API Endpoint’leri

@@ -7,10 +7,11 @@
     @await Html.PartialAsync("_ValidationScriptsPartial")
 }
 <div class="row">
+    
     <div class="col-md-4 offset-md-4">
         <h2>Sign In</h2>
         <div asp-validation-summary="ModelOnly" role="alert"></div>
-        <form asp-controller="Home" asp-action="SignIn" asp-route-returnurl="@Context.Request.Query["returnUrl"]" method="post">
+        <form class="mb-1" asp-controller="Home" asp-action="SignIn" asp-route-returnurl="@Context.Request.Query["returnUrl"]" method="post">
             <div class=" mb-3">
                 <label for="Email" class="col-md-4 col-form-label" asp-for="Email"></label>
 
@@ -37,9 +38,9 @@
             </div>
 
             <button type="submit" class="btn btn-primary">Log in</button>
-            <a class="btn btn-outline-primary" asp-action="FacebookLogin">Login With Facebook</a>
 
         </form>
-
+            <a class="mt-1 btn btn-outline-primary" asp-action="FacebookLogin">Login With Facebook</a>
+            <a class="mt-1 btn btn-outline-primary" asp-action="GoogleLogin">Login With Google</a>
     </div>
 </div>

@@ -28,7 +28,7 @@ namespace AspNetCoreIdentityApp.Web.Extensions
             });
 
         }
-        public static void AddIdentityServiceExt(this IServiceCollection services,IConfiguration configuration)
+        public static void AddIdentityServiceExt(this IServiceCollection services, IConfiguration configuration)
         {
 
             services.Configure<DataProtectionTokenProviderOptions>(opt =>
@@ -40,6 +40,10 @@ namespace AspNetCoreIdentityApp.Web.Extensions
             {
                 opts.AppId = configuration["Authentication:Facebook:AppId"];
                 opts.AppSecret = configuration["Authentication:Facebook:AppSecret"];
+            }).AddGoogle(opt =>
+            {
+                opt.ClientId = configuration["Authentication:Google:ClientID"];
+                opt.ClientSecret = configuration["Authentication:Google:ClientSecret"];
             });
             services.AddIdentity<AppUser, AppRole>(opt =>
             {
@@ -52,15 +56,15 @@ namespace AspNetCoreIdentityApp.Web.Extensions
                 opt.Password.RequireUppercase = false;
                 opt.Password.RequireDigit = false;
                 opt.Lockout.MaxFailedAccessAttempts = 3;
-                   opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3);
-               }).AddPasswordValidator<PasswordValidator>()
+                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3);
+            }).AddPasswordValidator<PasswordValidator>()
                .AddUserValidator<UserValidatior>()
                .AddErrorDescriber<LocalizationIdentityErrorDescriber>()
                .AddDefaultTokenProviders()
                .AddEntityFrameworkStores<AppDbContext>();
         }
 
-        public static void RegisterServicesExt(this IServiceCollection services,IConfiguration configuration)
+        public static void RegisterServicesExt(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.GetCurrentDirectory()));
 

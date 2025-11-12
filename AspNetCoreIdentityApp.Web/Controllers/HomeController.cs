@@ -9,6 +9,7 @@ using System.Security.Claims;
 using AspNetCoreIdentityApp.Repository.Models;
 using AspNetCoreIdentityApp.Service.Services;
 using Microsoft.CodeAnalysis;
+using AspNetCoreIdentityApp.Core.Models;
 namespace AspNetCoreIdentityApp.Web.Controllers
 {
     public class HomeController : Controller
@@ -58,7 +59,7 @@ namespace AspNetCoreIdentityApp.Web.Controllers
                 return View(request);
 
             }
-            var identityResult = await _userManager.CreateAsync(new() { UserName = request.UserName, PhoneNumber = request.Phone, Email = request.Email }, request.PasswordConfirm);
+            var identityResult = await _userManager.CreateAsync(new() { UserName = request.UserName, PhoneNumber = request.Phone, Email = request.Email, TwoFactor = (sbyte)TwoFactorialAuth.None}, request.PasswordConfirm);
 
             if (!identityResult.Succeeded)
             {

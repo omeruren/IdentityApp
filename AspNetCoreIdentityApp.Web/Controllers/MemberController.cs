@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using AspNetCoreIdentityApp.Repository.Models;
 using AspNetCoreIdentityApp.Service.Services;
+using System.Threading.Tasks;
+using AspNetCoreIdentityApp.Core.Models;
 
 namespace AspNetCoreIdentityApp.Web.Controllers
 {
@@ -133,5 +135,28 @@ namespace AspNetCoreIdentityApp.Web.Controllers
             return View();
         }
 
+
+        public async Task<IActionResult> TwoFactor()
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            return View(new AuthenticatiorViewModel() { TwoFactorType = (TwoFactorialAuth)user.TwoFactor });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> TwoFactor(AuthenticatiorViewModel request)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            switch (request.TwoFactorType)
+            {
+                case TwoFactorialAuth.None:
+                    user.TwoFactorEnabled = false;
+                    user.TwoFactor = (sbyte)TwoFactorialAuth.None;
+                    TempData["SuccessMessage"] = "Two Factor Authentication disabled successfully";
+                    break;
+
+            }
+            await _userManager.UpdateAsync(user);
+            return View(request);
+        }
     }
 }

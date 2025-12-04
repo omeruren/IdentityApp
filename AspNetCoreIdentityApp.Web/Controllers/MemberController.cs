@@ -156,7 +156,26 @@ public class MemberController : Controller
     [HttpPost]
     public async Task<IActionResult> TwoFactorWithAuthenticatior(AuthenticatiorViewModel authenticatiorViewModel)
     {
-        return View();
+        var verificationCode = authenticatiorViewModel.VerificationCode
+                                .Replace(" ", string.Empty).Replace("-", string.Empty);
+        var user = await _userManager.FindByNameAsync(userName);
+        var is2FATokenValid = await _userManager.VerifyTwoFactorTokenAsync(user, TokenOptions.DefaultAuthenticatorProvider, verificationCode);
+
+        if (is2FATokenValid)
+        {
+            user.TwoFactorEnabled = true;
+            user.TwoFactor = (sbyte)TwoFactorialAuth.MicrosoftGoogle;
+
+            var recoverKeys = await _userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 5);
+            TempData["recoverKeys"] = recoverKeys;
+            TempData["SuccessMessage"] = "Two Factor Authentication changed to Microsoft/Google successfully";
+            return RedirectToAction("TwoFactor");
+        }
+        else
+        {
+            ModelState.AddModelError("", "Wrong authentication code.");
+            return View(authenticatiorViewModel);
+        }
     }
     public async Task<IActionResult> TwoFactor()
     {

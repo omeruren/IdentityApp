@@ -13,6 +13,20 @@
         <div class="alert alert-info text-center" role="alert">
             @TempData["SuccessMessage"]
         </div>
+       
+    }
+    @if (TempData["recoverKeys"] != null)
+    {
+        <div class="col-md-12">
+
+       
+        <div class="alert alert-primary "> Recover Keys : 
+                @foreach (var item in @TempData["recoverKeys"] as string[])
+                {
+                    <strong> ( @item )</strong>
+                }
+        </div>
+        </div>
     }
     <div class="col-md-12">
         <form asp-action="TwoFactor" method="post">

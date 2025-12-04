@@ -67,7 +67,7 @@ namespace AspNetCoreIdentityApp.Web.Extensions
         public static void RegisterServicesExt(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.GetCurrentDirectory()));
-
+            services.AddScoped<TwoFactorialService>();
             services.AddIdentityServiceExt(configuration);
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IClaimsTransformation, UserClaimProvider>();
